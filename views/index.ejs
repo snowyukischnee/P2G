@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="/javascripts/socket.io.js"></script>
+    </head>
+    <body>
+        <h2>Time: <span id='time'></span></h2>
+        <h2>Phase: <span id='phase'></span> | Counter: <span id='counter'></span></h2>
+        <h3>Players: <span id='players'></span></h3>
+        <h3>Observer: <span id='observer'></span></h3>
+        <script>
+            let socket = io('/warfare');
+            //----------------------------------------------------------------
+            socket.on('rollback_action', () => console.log('rollback_action'))
+            socket.on('commit_action', () => console.log('commit_action'))
+            socket.on('time', (time) => {
+                document.getElementById('time').innerHTML = Math.floor(time / 1000);
+            })
+            socket.on('counter', (time) => {
+                document.getElementById('counter').innerHTML = 30 - Math.floor(time / 1000);
+            })
+            socket.on('current_phase', (phase) => {
+                document.getElementById('phase').innerHTML = phase;
+            })
+            socket.on('players', (players) => {
+                for(let player of players) {
+                    let x = '<br><span>' + JSON.stringify(player) + '</span>';
+                    document.getElementById('players').innerHTML += x;
+                }
+            })
+            socket.on('error', (mess) => console.log(mess));
+            socket.on('debug_message', (mess) => console.log(mess))
+            socket.on('debug_obs_result', (data) => {
+                let x = '<br><span>' + JSON.stringify(data) + '</span>';
+                document.getElementById('observer').innerHTML = x;
+            })
+            //----------------------------------------------------------------
+            socket.emit('find_game', {
+                name: 'namess'
+            })
+            socket.emit('check_sid', socket.id)
+        </script>
+    </body>
+</html>
