@@ -1,5 +1,6 @@
 'use strict'
 const _ = require('lodash');
+const roomCommit = require('./roomCommit');
 module.exports = class game {
     constructor(nsp, room) {
         this.nsp = nsp;
@@ -20,10 +21,14 @@ module.exports = class game {
             if (this.room.data.playing == false) {
                 clearInterval(clock);
             }
-        }, 1000)
+        }, 1000);
     }
 
     initPhase(index) {
+        this.room.prevPlrs = this.room.players;
+        for (let index = 0; index < this.room.players.length; index++) {
+            for (let i = 0; i < 3; i++) this.room.players[index].action[i] = null;
+        }
         this.nsp.to(this.room.id).emit('current_phase', index); // update current phase to user
         this.room.data.phase.spyStates = 0; // reset players spy states
         this.room.data.phase.actionStates = 0; // reset players action states
@@ -43,7 +48,7 @@ module.exports = class game {
             this.nsp.to(this.room.id).emit('counter', new Date().getTime() - this.room.data.phase.started); // update counter in this phase
             if (new Date().getTime() - this.room.data.phase.started > phaseTime * 1000 || this.checkAction()) {
                 this.nsp.to(this.room.id).emit('debug_message', 'end phase ' + index);
-                //commit data
+                this.room = roomCommit(this.room);
                 clearInterval(counter);
                 this.startPhase(index + 1, phaseTime);
             }
