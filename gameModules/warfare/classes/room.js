@@ -5,6 +5,7 @@ module.exports = class room {
         this.gameName = gameName; // game name
         this.id = uuid.v4(); // room id
         this.players = []; // players list
+        this.prevPlrs = [];
         this.data = {
             playing: false, // is playing
             started: null, // started timestamp

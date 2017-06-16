@@ -7,9 +7,9 @@ module.exports = class player {
         this.hp = hp; // health point
         this.alias = alias; // number order of player in room
         this.action = {
-            action0: null,
-            action1: null,
-            action2: null
+            "0": null,
+            "1": null,
+            "2": null
         }
     }
 }

@@ -2,7 +2,7 @@
 module.exports = class bitOperator {
     constructor(){}
     static getBit(val, index) {
-        return (val & (1 << index) != 0);
+        return (val & (1 << index)) != 0;
     }
 
     static onBit(val, index) {
