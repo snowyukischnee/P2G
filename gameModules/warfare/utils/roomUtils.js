@@ -29,6 +29,7 @@ module.exports = class roomUtils {
     leaveRoom(socket) {
         let roomToLeave = this.findRoom(socket);
         if (roomToLeave) {
+            while (roomToLeave.lock == true) {};
             roomToLeave.players = _.filter(roomToLeave.players, (player) => player.id != socket.id);
             socket.leave(roomToLeave.id); // leave room
             if (roomToLeave.players.length == 0) this.rooms = _.filter(this.rooms, (room) => room.id != roomToLeave.id); // delete room if no player in room

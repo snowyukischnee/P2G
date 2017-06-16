@@ -26,7 +26,7 @@ module.exports = class game {
 
     initPhase(index) {
         this.room.prevPlrs = this.room.players;
-        for (let index = 0; index < this.room.players.length; index++) {
+        for (let index = 0; index < (this.room.players).length; index++) {
             for (let i = 0; i < 3; i++) this.room.players[index].action[i] = null;
         }
         this.nsp.to(this.room.id).emit('current_phase', index); // update current phase to user
