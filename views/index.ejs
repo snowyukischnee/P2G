@@ -25,10 +25,13 @@
                 document.getElementById('phase').innerHTML = phase;
             })
             socket.on('players', (players) => {
+                document.getElementById('players').innerHTML = 'socket.emit(\'action_on\', [';
                 for(let player of players) {
-                    let x = '<br><span>' + JSON.stringify(player) + '</span>';
+                    if (socket.id == player) continue;
+                    let x = '{type:1,target:\"' + player + '\"},';
                     document.getElementById('players').innerHTML += x;
                 }
+                document.getElementById('players').innerHTML += '])';
             })
             socket.on('error', (mess) => console.log(mess));
             socket.on('debug_message', (mess) => console.log(mess))
