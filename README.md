@@ -13,14 +13,21 @@ $ npm install
 $ npm start
 ```
 ### Production mode
-For Linux
+Ubuntu/Linux:
 ```sh
 $ cd P2G
 $ npm install
 $ export NODE_ENV=production
 $ npm start
 ```
-For Windows (using PowerShell)
+OSX:
+```sh
+$ cd P2G
+$ npm install
+$ export NODE_ENV=production
+$ npm start
+```
+Windows (using PowerShell):
 ```powershell
 $ cd P2G
 $ npm install
@@ -31,7 +38,7 @@ after finished the installation, go to the browser and go to the following addre
 ```sh
 localhost:3000
 ```
-## Document
+## Documentation
 First, connect to the Socket.io server
 ```javascript
 let io = ('/warfare')
