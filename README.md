@@ -13,7 +13,7 @@ $ npm install
 $ npm start
 ```
 ### Production mode
-For Linux
+For Ubuntu/Linux and OSX
 ```sh
 $ cd P2G
 $ npm install
