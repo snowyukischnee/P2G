@@ -1,6 +1,6 @@
 # P2G
 >P2G is source code (server-side only) of the game project developed by **No Game No Life** team of **SE1106** class. This game is group project assignment of **SWE102** course
-## Tech
+## Technologies used
 P2G using [Express.js](https://expressjs.com/) and [Socket.io](https://socket.io/) to write the game server.
 The server communicate with the client by [Socket.io](https://socket.io/) through web socket to make it's easier to build multi-platform game with the source will not be changed too much
 ## QuickStart
@@ -54,7 +54,7 @@ used to leave room while ingame or while in waiting for other players, automatic
 ```javascript
 socket.emit('get_info')
 ```
-used to get player information (id, hp, action, etc) by trigger `player` event
+used to get player information (`id`, `hp`, `action`,..) by trigger `player` event
 #### action_on
 ```javascript
 socket.on('action_on', (data))
