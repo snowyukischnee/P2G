@@ -34,11 +34,18 @@ module.exports = (io) => {
         socket.on('disconnect', () => {
             roomPlcm.leaveRoom(socket);
         });
-        //----------------
-        socket.on('check_sid', (sid) => {
+        //--------unnessessary---
+        /*socket.on('check_sid', (sid) => {
             if (socket.id == sid) socket.emit('check_sid_result_rollback');
             else if (roomPlcm.findRoomId(sid) == roomPlcm.findRoomId(socket.id)) socket.emit('check_sid_result_commit');
             else socket.emit('check_sid_result_rollback');
+        });*/
+        //----------------
+        socket.on('get_info', () => {
+            let player = roomPlcm.findPlayer(socket.id);
+            if (exists(player)) {
+                socket.emit('player', player);
+            }
         });
         socket.on('action_on', (data) => {
             let room = roomPlcm.findRoomId(socket.id);
@@ -105,6 +112,7 @@ module.exports = (io) => {
                 socket.emit('err', 'give action already used');
             }
         })
+        //--------------debug-----------------------------------------
         socket.on('debug_obs', () => {
             socket.emit('debug_obs_result', roomPlcm.findRoom(socket));
         });
