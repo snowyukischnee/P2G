@@ -13,7 +13,7 @@ $ npm install
 $ npm start
 ```
 ### Production mode
-For Linux
+For Ubuntu/Linux and OSX
 ```sh
 $ cd P2G
 $ npm install
@@ -62,7 +62,7 @@ socket.on('action_on', (data))
 * `data`(Array, 3 elements): array to store player current prompted move
 	* `i-th element`(Object)
 		* `type`(Number): type of move (`0`: Defense, `1`: Attack)
-		* `target`(Socket id): the id of the socket that move target to
+		* `target`(String): the id of the socket that move target to
 		
 used to prompted the moves in the current phase ingame
 #### action_off
@@ -82,7 +82,7 @@ player send a ammount of hp to targeted player, hp for sending must be positive 
 #### spy(CURRENTLY NOT IMPLEMENTED)
 #### chat_all(CURRENTLY NOT IMPLEMENTED)
 #### chat(CURRENTLY NOT IMPLEMENTED)
-#### debug_obs (DEBUG_ONLY)
+#### debug_obs (DEBUG_ONLY)(WILL BE REMOVED IN GAME)
 ```javascript
 socket.emit('debug_obs')
 ```
@@ -136,13 +136,13 @@ player all information, triggered by `get_info` event
 socket.on('update')
 ```
 used to server force player to refresh data
-#### debug_message(DEBUG)
+#### debug_message(DEBUG_ONLY)
 ```javascript
 socket.on('debug_message', callback(message))
 ```
 debug message sent by server
 message sent by server used to debug
-#### debug_obs_result(DEBUG)
+#### debug_obs_result(DEBUG_ONLY)(WILL BE REMOVED IN GAME)
 ```javascript
 socket.on('debug_obs_result', callback(room))
 ```
@@ -162,7 +162,7 @@ socket.on('debug_obs_result', callback(room))
 			* `started`(Number): timestamp when phase started
 			
 result sent by server, triggered by `debug_obs` event
-#### err(DEBUG)
+#### err(DEBUG_ONLY)
 ```javascript
 socket.on('err', callback(message))
 ```
