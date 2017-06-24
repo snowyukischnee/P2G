@@ -8,13 +8,22 @@ function exists(obj) {
 }
 
 function valid(data, roomPlacement, sid) {
-    // check duplicate
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (data[i].type == data[j].type && data[i].target == data[j].target) return false;
+        }
+    }
     for (let i = 0; i < 3; i++) {
         if (data[i].type != 0 && data[i].type != 1) return false;
         if (sid == data[i].target) return false;
         if (roomPlacement.findRoomId(sid) != roomPlacement.findRoomId(data[i].target)) return false;
     }
     return true;
+}
+
+function isInt(value) {
+    let x;
+    return isNaN(value) ? !1 : (x = parseFloat(value), (0 | x) === x);
 }
 
 
@@ -50,7 +59,7 @@ module.exports = (io) => {
         socket.on('action_on', (data) => {
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
-                socket.emit('err', 'room not exists or game is not started');
+                socket.emit('err', 'action_on:room not exists or game is not started');
                 return;
             }
             let player = roomPlcm.findPlayer(socket.id);
@@ -62,13 +71,13 @@ module.exports = (io) => {
                     player.action[2] = new action(data[2].type, data[2].target);
                 }
             } else {
-                socket.emit('err', 'turn off action first state before turn on again');
+                socket.emit('err', 'action_on:state is currently on, switch off before turn on again');
             }
         });
         socket.on('action_off', () => {
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
-                socket.emit('err', 'room not exists or game is not started');
+                socket.emit('err', 'action_off:room not exists or game is not started');
                 return;
             }
             let player = roomPlcm.findPlayer(socket.id);
@@ -79,37 +88,44 @@ module.exports = (io) => {
                 player.action[1] = null;
                 player.action[2] = null;
             } else {
-                socket.emit('err', 'turn on action first state before turn off');
+                socket.emit('err', 'action_on:state is currently off, switch on before turn off again');
             }
         });
         socket.on('spy', (data) => {
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
-                socket.emit('err', 'room not exists or game is not started');
+                socket.emit('err', 'spy:room not exists or game is not started');
                 return;
             }
             let player = roomPlcm.findPlayer(socket.id);
-            if (exists(room) && exists(player) && !bitOperator.getBit(room.data.phase.spyStates, player.alias)) {
+            let targetPlayer = roomPlcm.findPlayer(data.id);
+            if (exists(room) && exists(player) && exists(targetPlayer) && !bitOperator.getBit(room.data.phase.spyStates, player.alias)) {
                 room.data.phase.spyStates = bitOperator.onBit(room.data.phase.spyStates, player.alias);
-                // commit spy
-                socket.emit('spy_result');
+                // spy
             } else {
-                socket.emit('err', 'spy action alreadly used');
+                socket.emit('err', 'spy:spy alreadly used');
             }
         });
         socket.on('give', (data) => {
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
-                socket.emit('err', 'room not exists or game is not started');
+                socket.emit('err', 'give:room not exists or game is not started');
                 return;
             }
             let player = roomPlcm.findPlayer(socket.id);
-            if (exists(room) && exists(player) && !bitOperator.getBit(room.data.phase.giveStates, player.alias)) {
-                room.data.phase.spyStates = bitOperator.onBit(room.data.phase.giveStates, player.alias);
-                // commit give
-                socket.emit('give_result');
+            let targetPlayer = roomPlcm.findPlayer(data.id);
+            if (exists(room) && exists(player) && exists(targetPlayer) && !bitOperator.getBit(room.data.phase.giveStates, player.alias)) {
+                if (exists(data.ammount) && isInt(data.ammount) && data.ammount <= 2 && data.ammount >= 0) {
+                    room.players[player.alias].hp -= data.ammount;
+                    room.players[targetPlayer.alias].hp += data.ammount;
+                    room.data.phase.spyStates = bitOperator.onBit(room.data.phase.giveStates, player.alias);
+                    socket.emit('update')
+                    namespace.to(targetPlayer.id).emit('update');
+                } else {
+                    socket.emit('err', 'give:give ammount not valid');
+                }
             } else {
-                socket.emit('err', 'give action already used');
+                socket.emit('err', 'give:give already used');
             }
         })
         //--------------debug-----------------------------------------

@@ -13,21 +13,14 @@ $ npm install
 $ npm start
 ```
 ### Production mode
-Ubuntu/Linux:
+For Linux
 ```sh
 $ cd P2G
 $ npm install
 $ export NODE_ENV=production
 $ npm start
 ```
-OSX:
-```sh
-$ cd P2G
-$ npm install
-$ export NODE_ENV=production
-$ npm start
-```
-Windows (using PowerShell):
+For Windows (using PowerShell)
 ```powershell
 $ cd P2G
 $ npm install
@@ -38,7 +31,7 @@ after finished the installation, go to the browser and go to the following addre
 ```sh
 localhost:3000
 ```
-## Documentation
+## Documentation (for client-side)
 First, connect to the Socket.io server
 ```javascript
 let io = ('/warfare')
@@ -77,6 +70,18 @@ used to prompted the moves in the current phase ingame
 socket.emit('action_off')
 ```
 clear all move that player prompted in the current phase ingame
+#### give
+```javascript
+socket.emit('give', data)
+```
+* `data`(Object)
+    * `id`(String): target player's id to give
+    * `ammount`(Number): ammount of hp to send
+    
+player send a ammount of hp to targeted player, hp for sending must be positive integer and <= 2
+#### spy(CURRENTLY NOT IMPLEMENTED)
+#### chat_all(CURRENTLY NOT IMPLEMENTED)
+#### chat(CURRENTLY NOT IMPLEMENTED)
 #### debug_obs (DEBUG_ONLY)
 ```javascript
 socket.emit('debug_obs')
@@ -126,6 +131,11 @@ socket.on('player', callback(player))
 		* `target`(Socket id): the id of the socket that move target to
 		
 player all information, triggered by `get_info` event
+#### update
+```javascript
+socket.on('update')
+```
+used to server force player to refresh data
 #### debug_message(DEBUG)
 ```javascript
 socket.on('debug_message', callback(message))

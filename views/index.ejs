@@ -13,6 +13,9 @@
         <script>
             let socket = io('/warfare');
             //----------------------------------------------------------------
+            socket.on('update', () => {
+                socket.emit('get_info');
+            })
             socket.on('time', (time) => {
                 document.getElementById('time').innerHTML = Math.floor(time / 1000);
             })
