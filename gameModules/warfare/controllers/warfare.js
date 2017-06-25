@@ -10,7 +10,7 @@ function exists(obj) {
 function valid(data, roomPlacement, sid) {
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            if (data[i].type == data[j].type && data[i].target == data[j].target) return false;
+            if (i != j && data[i].type == data[j].type && data[i].target == data[j].target) return false;
         }
     }
     for (let i = 0; i < 3; i++) {
@@ -65,10 +65,12 @@ module.exports = (io) => {
             let player = roomPlcm.findPlayer(socket.id);
             if (exists(room) && exists(player) && !bitOperator.getBit(room.data.phase.actionStates, player.alias)) {
                 room.data.phase.actionStates = bitOperator.onBit(room.data.phase.actionStates, player.alias);
-                if (data && data.length >= 3 && valid(data, roomPlcm, socket.id)) {
+                if (exists(data) && data.length >= 3 && valid(data, roomPlcm, socket.id)) {
                     player.action[0] = new action(data[0].type, data[0].target);
                     player.action[1] = new action(data[1].type, data[1].target);
                     player.action[2] = new action(data[2].type, data[2].target);
+                } else {
+                    socket.emit('err', 'action_on:data not valid');
                 }
             } else {
                 socket.emit('err', 'action_on:state is currently on, switch off before turn on again');

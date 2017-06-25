@@ -16,6 +16,10 @@
             socket.on('update', () => {
                 socket.emit('get_info');
             })
+            socket.on('leave_game', () => {
+                socket.emit('leave_room');
+                console.log('leaved');
+            })
             socket.on('time', (time) => {
                 document.getElementById('time').innerHTML = Math.floor(time / 1000);
             })
@@ -38,14 +42,15 @@
             socket.on('err', (mess) => console.log(mess));
             socket.on('debug_message', (mess) => console.log(mess))
             socket.on('debug_obs_result', (data) => {
+                console.log(data)
                 let x = '<br><span>' + JSON.stringify(data) + '</span>';
                 document.getElementById('observer').innerHTML = x;
             })
+            socket.on('game_ended', () => console.log('game_ended'))
             //----------------------------------------------------------------
             socket.emit('find_game', {
                 name: 'namess'
             })
-            socket.emit('check_sid', socket.id)
         </script>
     </body>
 </html>

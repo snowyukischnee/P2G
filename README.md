@@ -135,7 +135,17 @@ player all information, triggered by `get_info` event
 ```javascript
 socket.on('update')
 ```
-used to server force player to refresh data
+used by server to force player to refresh data
+#### leave_game
+```javascript
+socket.on('leave_game')
+```
+used by server to force player to leave room
+#### game_ended
+```javascript
+socket.on('game_ended')
+```
+used by server to notify player that game's ended, also mean player is the winner
 #### debug_message(DEBUG_ONLY)
 ```javascript
 socket.on('debug_message', callback(message))
