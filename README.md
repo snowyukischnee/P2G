@@ -86,7 +86,7 @@ player send a ammount of hp to targeted player, hp for sending must be positive 
 socket.emit('chat', data)
 ```
 * `data`(Object)
-    * `target`(String): target to send message, `null` to send to all players in room
+    * `target`(String): target's id to send message, `null` to send to all players in room
     * `message`(String): message to send
     
 send message to other player or send to all players in room
