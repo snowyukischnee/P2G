@@ -161,8 +161,17 @@ socket.on('game_ended')
 used by server to notify player that game's ended, also mean player is the winner
 #### message
 ```javascript
-socket.on('message', callback(message))
+socket.on('message', callback(data))
 ```
+* `data`(Object)
+    * `type`(Number): message type (`1`: private, `0`: public)
+    * `source`(Object) 
+        * `id`(String): player sent message id
+        * `name`(String): player sent message name
+        * `alias`(Number): player sent message alias
+    * `message`(String): received message
+    
+received message
 #### spy_result
 ```javascript
 socket.on('spy_result', callback(data))
@@ -205,5 +214,8 @@ result sent by server, triggered by `debug_obs` event
 socket.on('err', callback(message))
 ```
 error message sent by server
+
+> ### For further usage of the functions, see `index.ejs`
+
 ## Author
 tuannhse04791

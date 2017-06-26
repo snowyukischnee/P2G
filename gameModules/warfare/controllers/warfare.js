@@ -158,10 +158,26 @@ module.exports = (io) => {
             if (data.target != null) {
                 let targetPlayer = roomPlcm.findPlayer(data.target);
                 if (exists(targetPlayer)) {
-                    namespace.to(targetPlayer.id).emit('message', data.message);
+                    namespace.to(targetPlayer.id).emit('message', {
+                        type: 0,
+                        source: {
+                            id: player.id,
+                            name: player.name,
+                            alias: player.alias
+                        },
+                        message: data.message
+                    });
                 }
             } else {
-                namespace.to(room.id).emit('message', data.message);
+                namespace.to(room.id).emit('message', {
+                    type: 1,
+                    source: {
+                        id: player.id,
+                        name: player.name,
+                        alias: player.alias
+                    },
+                    message: data.message
+                });
             }
         });
         //--------------debug-----------------------------------------

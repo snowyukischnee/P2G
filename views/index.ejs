@@ -8,6 +8,9 @@
     <body>
         <h2>Time: <span id='time'></span></h2>
         <h2>Phase: <span id='phase'></span> | Counter: <span id='counter'></span></h2>
+        <h2>HP: <span id='hp'></span></h2>
+        <h3>Chat box:</h3>
+        <textarea rows="10" cols="100" id="mess_box"></textarea>
         <h3>Players: <span id='players'></span></h3>
         <h3>Observer: <span id='observer'></span></h3>
         <script>
@@ -29,19 +32,26 @@
             socket.on('current_phase', (phase) => {
                 document.getElementById('phase').innerHTML = phase;
             })
+
             socket.on('players', (players) => {
-                document.getElementById('players').innerHTML = 'socket.emit(\'action_on\', [';
+                document.getElementById('players').innerHTML = '<br>';
                 for(let player of players) {
-                    if (socket.id == player) continue;
-                    let x = '{type:1,target:\"' + player + '\"},';
-                    document.getElementById('players').innerHTML += x;
+                    document.getElementById('players').innerHTML += JSON.stringify(player);
+                    document.getElementById('players').innerHTML += '<br>';
                 }
-                document.getElementById('players').innerHTML += '])';
             })
-            socket.on('player', (player) => console.log(player));
+            socket.on('player', (player) => {
+                document.getElementById('hp').innerHTML = player.hp;
+            });
             socket.on('err', (mess) => console.log(mess));
             socket.on('debug_message', (mess) => console.log(mess));
-            socket.on('message', (mess) => console.log(mess))
+            socket.on('message', (data) => {
+                if (data.type == 0) {
+                    document.getElementById('mess_box').innerHTML += data.source.name + '(' + data.source.alias + ')' + '(public): ' + data.message;
+                } else if (data.type == 1) {
+                    document.getElementById('mess_box').innerHTML += data.source.name + '(' + data.source.alias + ')' + '(private): ' + data.message;
+                }
+            })
             socket.on('spy_result', (player) => {
                 console.log(player);
             })

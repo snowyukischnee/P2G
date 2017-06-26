@@ -8,6 +8,7 @@ module.exports = class game {
     }
 
     start() {
+        this.nsp.to(this.room.id).emit('update');
         this.nsp.to(this.room.id).emit('players', _.map(this.room.players, 'id'));
         this.room.data.playing = true;
         this.room.data.started = new Date().getTime();
