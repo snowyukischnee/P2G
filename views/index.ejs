@@ -42,6 +42,9 @@
             socket.on('err', (mess) => console.log(mess));
             socket.on('debug_message', (mess) => console.log(mess));
             socket.on('message', (mess) => console.log(mess))
+            socket.on('spy_result', (player) => {
+                console.log(player);
+            })
             socket.on('debug_obs_result', (data) => {
                 console.log(data)
                 let x = '<br><span>' + JSON.stringify(data) + '</span>';
