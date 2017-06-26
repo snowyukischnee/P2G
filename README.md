@@ -81,8 +81,15 @@ socket.emit('give', data)
     
 player send a ammount of hp to targeted player, hp for sending must be positive integer and <= 2
 #### spy(CURRENTLY NOT IMPLEMENTED)
-#### chat_all(CURRENTLY NOT IMPLEMENTED)
-#### chat(CURRENTLY NOT IMPLEMENTED)
+#### chat
+```javascript
+socket.emit('chat', data)
+```
+* `data`(Object)
+    * `target`(String): target to send message, `null` to send to all players in room
+    * `message`(String): message to send
+    
+send message to other player or send to all players in room
 #### debug_obs (DEBUG_ONLY)(WILL BE REMOVED IN GAME)
 ```javascript
 socket.emit('debug_obs')

@@ -129,7 +129,23 @@ module.exports = (io) => {
             } else {
                 socket.emit('err', 'give:give already used');
             }
-        })
+        });
+        socket.on('chat', (data) => {
+            let room = roomPlcm.findRoomId(socket.id);
+            if (!exists(room) || exists(room) && room.data.playing == false) {
+                socket.emit('err', 'chat:room not exists or game is not started');
+                return;
+            }
+            let player = roomPlcm.findPlayer(socket.id);
+            if (data.target != null) {
+                let targetPlayer = roomPlcm.findPlayer(data.target);
+                if (exists(targetPlayer)) {
+                    namespace.to(targetPlayer.id).emit('message', data.message);
+                }
+            } else {
+                namespace.to(room.id).emit('message', data.message);
+            }
+        });
         //--------------debug-----------------------------------------
         socket.on('debug_obs', () => {
             socket.emit('debug_obs_result', roomPlcm.findRoom(socket));
