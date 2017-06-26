@@ -80,7 +80,12 @@ socket.emit('give', data)
     * `ammount`(Number): ammount of hp to send
     
 player send a ammount of hp to targeted player, hp for sending must be positive integer and <= 2
-#### spy(CURRENTLY NOT IMPLEMENTED)
+#### spy
+```javascript
+socket.emit('chat', data)
+```
+* `data`(Object)
+    * `id`(String) target player's id to spy, this function will cause server to trigger `spy_result` event on client
 #### chat
 ```javascript
 socket.emit('chat', data)
@@ -89,7 +94,7 @@ socket.emit('chat', data)
     * `target`(String): target's id to send message, `null` to send to all players in room
     * `message`(String): message to send
     
-send message to other player or send to all players in room
+send message to other player or send to all players in room, thís function will trigger `message` event on client
 #### debug_obs (DEBUG_ONLY)(WILL BE REMOVED IN GAME)
 ```javascript
 socket.emit('debug_obs')
@@ -136,7 +141,7 @@ socket.on('player', callback(player))
 	* `alias`(Number): player's alias in room (since room have maximum 4 players, alias ranged from 0 to 3)
 	* `action`(Array, fixed length, 3 elements): store player's action in current phase ingame, `null` if player don't prompt that move
 		* `type`(Number): type of move (`0`: Defense, `1`: Attack)
-		* `target`(Socket id): the id of the socket that move target to
+		* `target`(String): target player's id
 		
 player all information, triggered by `get_info` event
 #### update
@@ -154,6 +159,21 @@ used by server to force player to leave room
 socket.on('game_ended')
 ```
 used by server to notify player that game's ended, also mean player is the winner
+#### message
+```javascript
+socket.on('message', callback(message))
+```
+#### spy_result
+```javascript
+socket.on('spy_result', callback(data))
+```
+* `data`(Object): store target player information in the previous phase ingame
+    * `hp`(Number): HP
+    * `action`(Array)
+        * `type`(Number): action type (`0`: Defense, `1`: Attack)
+        * `target`(String): target player's id
+        
+result of `spy` event, triggered by server
 #### debug_message(DEBUG_ONLY)
 ```javascript
 socket.on('debug_message', callback(message))

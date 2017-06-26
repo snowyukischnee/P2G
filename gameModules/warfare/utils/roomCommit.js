@@ -19,7 +19,6 @@ function update(room, guard, offensive, name) {
             }
         }
     }
-    console.log(diff);
     for (let index = 0; index < room.players.length; index++) {
        room.players[index].hp += diff[index];
        if (room.players[index].hp <= 0) room.players[index].hp = 0;

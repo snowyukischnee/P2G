@@ -94,6 +94,10 @@ module.exports = (io) => {
             }
         });
         socket.on('spy', (data) => {
+            if (socket.id == data.id) {
+                socket.emit('err', 'spy:can not spy to self');
+                return;
+            }
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
                 socket.emit('err', 'spy:room not exists or game is not started');
@@ -103,12 +107,26 @@ module.exports = (io) => {
             let targetPlayer = roomPlcm.findPlayer(data.id);
             if (exists(room) && exists(player) && exists(targetPlayer) && !bitOperator.getBit(room.data.phase.spyStates, player.alias)) {
                 room.data.phase.spyStates = bitOperator.onBit(room.data.phase.spyStates, player.alias);
-                // spy
+                for (let index = 0; index < room.prevPlrs.length; index++) {
+                    if (room.prevPlrs[index].id == data.id) {
+                        socket.emit('spy_result', {
+                            hp: room.prevPlrs[index].hp,
+                            action: room.prevPlrs[index].action
+                        });
+                        break;
+                    }
+                }
+                player.hp -= 1;
+                socket.emit('update');
             } else {
                 socket.emit('err', 'spy:spy alreadly used');
             }
         });
         socket.on('give', (data) => {
+            if (socket.id == data.id) {
+                socket.emit('err', 'give:can not give to self');
+                return;
+            }
             let room = roomPlcm.findRoomId(socket.id);
             if (!exists(room) || exists(room) && room.data.playing == false) {
                 socket.emit('err', 'give:room not exists or game is not started');
@@ -121,7 +139,7 @@ module.exports = (io) => {
                     room.players[player.alias].hp -= data.ammount;
                     room.players[targetPlayer.alias].hp += data.ammount;
                     room.data.phase.spyStates = bitOperator.onBit(room.data.phase.giveStates, player.alias);
-                    socket.emit('update')
+                    socket.emit('update');
                     namespace.to(targetPlayer.id).emit('update');
                 } else {
                     socket.emit('err', 'give:give ammount not valid');
