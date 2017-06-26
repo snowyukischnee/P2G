@@ -9,7 +9,15 @@ module.exports = class game {
 
     start() {
         this.nsp.to(this.room.id).emit('update');
-        this.nsp.to(this.room.id).emit('players', _.map(this.room.players, 'id'));
+        let players = [];
+        for (let index = 0; index < this.room.players.length; index++) {
+            players.push({
+                id: this.room.players[index].id,
+                name: this.room.players[index].name,
+                alias: this.room.players[index].alias,
+            })
+        }
+        this.nsp.to(this.room.id).emit('players', players);
         this.room.data.playing = true;
         this.room.data.started = new Date().getTime();
         this.clock();
