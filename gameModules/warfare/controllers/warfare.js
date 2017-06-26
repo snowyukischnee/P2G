@@ -159,7 +159,7 @@ module.exports = (io) => {
                 let targetPlayer = roomPlcm.findPlayer(data.target);
                 if (exists(targetPlayer)) {
                     namespace.to(targetPlayer.id).emit('message', {
-                        type: 0,
+                        type: 1,
                         source: {
                             id: player.id,
                             name: player.name,
@@ -170,7 +170,7 @@ module.exports = (io) => {
                 }
             } else {
                 namespace.to(room.id).emit('message', {
-                    type: 1,
+                    type: 0,
                     source: {
                         id: player.id,
                         name: player.name,
