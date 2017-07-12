@@ -10,6 +10,12 @@ module.exports = class player {
             "0": null,
             "1": null,
             "2": null
+        };
+        this.prevData = {
+            attackBy: [],
+            defenseBy: [],
+            attackTo: [],
+            defenseTo: [],
         }
     }
 }

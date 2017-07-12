@@ -142,6 +142,11 @@ socket.on('player', callback(player))
 	* `action`(Array, fixed length, 3 elements): store player's action in current phase ingame, `null` if player don't prompt that move
 		* `type`(Number): type of move (`0`: Defense, `1`: Attack)
 		* `target`(String): target player's id
+	* `prevData`(Object): data of the previous phase of player
+	    * `attackBy`(Array)
+	    * `attackTo`(Array)
+	    * `defenseBy`(Array)
+	    * `defenseTo`(Array)
 		
 player all information, triggered by `get_info` event
 #### update

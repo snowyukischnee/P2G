@@ -41,6 +41,7 @@
                 }
             })
             socket.on('player', (player) => {
+                console.log(player);
                 document.getElementById('hp').innerHTML = player.hp;
             });
             socket.on('err', (mess) => console.log(mess));

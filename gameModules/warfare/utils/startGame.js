@@ -72,6 +72,7 @@ module.exports = class game {
     }
 
     startPhase(index, phaseTime) {
+        this.nsp.to(this.room.id).emit('update');
         if (!this.checkEnded()) {
             this.initPhase(index);
             let counter = setInterval(() => {
