@@ -5,8 +5,8 @@ function update(room, guard, offensive, name, invName) {
     for (let i = 0; i < room.players.length; i++) {
         room.players[i].prevData.defenseTo = [];
         room.players[i].prevData.attackBy = [];
-        room.players[j].prevData.defenseBy = [];
-        room.players[j].prevData.attackTo = [];
+        room.players[i].prevData.defenseBy = [];
+        room.players[i].prevData.attackTo = [];
     }
     for (let i = 0; i < room.players.length; i++) {
         for (let j = 0; j < room.players.length; j++) {
