@@ -65,10 +65,13 @@ module.exports = (io) => {
             let player = roomPlcm.findPlayer(socket.id);
             if (exists(room) && exists(player) && !bitOperator.getBit(room.data.phase.actionStates, player.alias)) {
                 room.data.phase.actionStates = bitOperator.onBit(room.data.phase.actionStates, player.alias);
-                if (exists(data) && data.length >= 3 && valid(data, roomPlcm, socket.id)) {
-                    player.action[0] = new action(data[0].type, data[0].target);
-                    player.action[1] = new action(data[1].type, data[1].target);
-                    player.action[2] = new action(data[2].type, data[2].target);
+                if (exists(data) && data.length <= room.players.length - 1 && valid(data, roomPlcm, socket.id)) {
+                    for (let i = 0; i < data.length; i++) {
+                        player.action[i] = new action(data[i].type, data[i].target);
+                    }
+                    //player.action[0] = new action(data[0].type, data[0].target);
+                    //player.action[1] = new action(data[1].type, data[1].target);
+                    //player.action[2] = new action(data[2].type, data[2].target);
                 } else {
                     socket.emit('err', 'action_on:data not valid');
                 }
